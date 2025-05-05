@@ -1,0 +1,72 @@
+@use "../abstracts/mixins.scss" as *;
+.patients-details {
+  width: 100%;
+  background-color: rgb(230, 230, 230);
+  padding: 1rem;
+  margin: 0 auto;
+  @include tablet {
+    padding: 2rem;
+    height: 100vh;
+  }
+  &__notes {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: stretch;
+    padding: 1rem;
+    border-radius: 0.8rem;
+    position: relative;
+    flex-direction: column;
+    @include tablet {
+      flex-direction: row;
+    }
+  }
+  &__heading {
+    font-weight: 700;
+    list-style: 1.5;
+    margin-bottom: 1rem;
+  }
+  &__back-button {
+    background-color: transparent;
+    margin-bottom: 2rem;
+    color: #14790b;
+  }
+  &__notes-container {
+    width: 100%;
+    padding: 0 1rem;
+    height: 100%;
+    height: auto;
+    @include tablet {
+      width: 60%;
+      padding: 0 2rem;
+    }
+  }
+  &__notes-heading {
+    padding: 0;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+  }
+  &__add-note-button {
+    position: initial;
+    width: 100%;
+    background-color: #1ca809 !important;
+    color: white;
+    border: none;
+    padding: 1rem 5rem !important;
+    border-radius: 0.5rem;
+    margin: 1rem 0;
+    cursor: pointer;
+    &:hover {
+      background-color: #14790b !important;
+    }
+    @include tablet {
+      position: absolute;
+      right: 2rem;
+      bottom: 2rem;
+      width: fit-content;
+      margin: 0;
+    }
+  }
+}

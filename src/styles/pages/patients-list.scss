@@ -1,0 +1,40 @@
+@use "../abstracts/mixins.scss" as *;
+
+.patients-list {
+  width: 100%;
+  background-color: rgb(230, 230, 230);
+  padding: 1rem;
+  min-height: 100vh;
+  @include tablet {
+    padding: 2rem;
+    height: fit-content;
+  }
+  &__actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+    background-color: transparent;
+    padding: 0 0.5rem;
+    @include tablet {
+      margin-bottom: 1rem;
+    }
+  }
+  &__heading {
+    font-weight: 700;
+    list-style: 1.5;
+    margin-bottom: 4rem;
+  }
+  &__table {
+    padding: 2rem;
+    border-radius: 1.5rem;
+    border: 1px solid #ccc;
+  }
+
+  &__notes-heading {
+    padding: 0;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+  }
+}
