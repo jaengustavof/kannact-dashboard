@@ -12,33 +12,28 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-
-type AddNoteProps = {
-  patientId: string;
-};
-
-type FormValues = {
-  content: string;
-};
+import ADDNOTES from "@/constants/AddNotes";
+import { AddNoteProps } from "@/types/patients.types";
+import { AddNoteFormValue } from "@/types/patients.types";
 
 export default function AddNote({ patientId }: AddNoteProps) {
   const queryClient = useQueryClient();
 
-  const { register, handleSubmit, reset } = useForm<FormValues>({
+  const { register, handleSubmit, reset } = useForm<AddNoteFormValue>({
     defaultValues: {
       content: "",
     },
   });
 
   const mutation = useMutation({
-    mutationFn: (data: FormValues) => addNote(patientId, data.content),
+    mutationFn: (data: AddNoteFormValue) => addNote(patientId, data.content),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["notes", patientId] });
       reset();
     },
   });
 
-  const onSubmit = (data: FormValues) => {
+  const onSubmit = (data: AddNoteFormValue) => {
     mutation.mutate(data);
   };
 
@@ -46,13 +41,13 @@ export default function AddNote({ patientId }: AddNoteProps) {
     <Sheet>
       <SheetTrigger asChild>
         <Button variant="outline" className="patients-details__add-note-button">
-          + Add Note
+          {ADDNOTES.ADD_NOTES}
         </Button>
       </SheetTrigger>
       <SheetContent>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           <SheetHeader>
-            <SheetTitle>Add Note</SheetTitle>
+            <SheetTitle>{ADDNOTES.ADD_NOTE}</SheetTitle>
           </SheetHeader>
 
           <div className="grid gap-4 py-2">
@@ -72,7 +67,7 @@ export default function AddNote({ patientId }: AddNoteProps) {
           <SheetFooter>
             <SheetClose asChild>
               <Button type="submit" disabled={mutation.isPending}>
-                Add Note
+                {ADDNOTES.ADD_NOTE}
               </Button>
             </SheetClose>
           </SheetFooter>

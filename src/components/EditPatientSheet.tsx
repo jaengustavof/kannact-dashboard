@@ -1,7 +1,6 @@
 import { useForm } from "react-hook-form";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { updatePatient } from "@/api/patientsApi";
-import { Patient } from "@/types/api.types";
 
 import {
   Sheet,
@@ -14,17 +13,10 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-
-type EditPatientSheetProps = {
-  patient: Patient;
-  onClose: () => void;
-};
-
-type FormValues = {
-  name: string;
-  age: number;
-  condition: string;
-};
+import EDITPATIENTSHEET from "@/constants/EditPatientSheet";
+import { EditPatientSheetProps } from "@/types/patients.types";
+import { EditPatientSheetFormValues } from "@/types/patients.types";
+import { toast } from "react-toastify";
 
 export default function EditPatientSheet({
   patient,
@@ -32,24 +24,37 @@ export default function EditPatientSheet({
 }: EditPatientSheetProps) {
   const queryClient = useQueryClient();
 
-  const { register, handleSubmit, reset } = useForm<FormValues>({
-    defaultValues: {
-      name: patient.name,
-      age: patient.age,
-      condition: patient.condition,
-    },
-  });
+  const { register, handleSubmit, reset } = useForm<EditPatientSheetFormValues>(
+    {
+      defaultValues: {
+        name: patient.name,
+        age: patient.age,
+        condition: patient.condition,
+      },
+    }
+  );
 
   const mutation = useMutation({
-    mutationFn: (data: FormValues) => updatePatient(patient.id, data),
+    mutationFn: (data: EditPatientSheetFormValues) =>
+      updatePatient(patient.id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["patients"] });
-      onClose(); // cerrar el sheet después de actualizar
+      onClose();
       reset();
+      toast.success("Patient has been edited", {
+        position: "bottom-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
     },
   });
 
-  const onSubmit = (data: FormValues) => {
+  const onSubmit = (data: EditPatientSheetFormValues) => {
     mutation.mutate(data);
   };
 
@@ -58,16 +63,16 @@ export default function EditPatientSheet({
       <SheetContent>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           <SheetHeader>
-            <SheetTitle>Edit profile</SheetTitle>
+            <SheetTitle>{EDITPATIENTSHEET.EDIT_PROFILE}</SheetTitle>
             <SheetDescription>
-              Make changes to the patient and click save.
+              {EDITPATIENTSHEET.EDIT_DESCRIPTION}
             </SheetDescription>
           </SheetHeader>
 
           <div className="grid gap-4 py-2">
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="name" className="text-right">
-                Patient name
+                {EDITPATIENTSHEET.PATIENT_NAME}
               </Label>
               <Input
                 id="name"
@@ -78,7 +83,7 @@ export default function EditPatientSheet({
 
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="age" className="text-right">
-                Age
+                {EDITPATIENTSHEET.AGE}
               </Label>
               <Input
                 id="age"
@@ -90,7 +95,7 @@ export default function EditPatientSheet({
 
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="condition" className="text-right">
-                Condition
+                {EDITPATIENTSHEET.CONDITION}
               </Label>
               <Input
                 id="condition"
@@ -102,7 +107,9 @@ export default function EditPatientSheet({
 
           <SheetFooter>
             <Button type="submit" disabled={mutation.isPending}>
-              {mutation.isPending ? "Saving..." : "Save changes"}
+              {mutation.isPending
+                ? EDITPATIENTSHEET.SAVING
+                : EDITPATIENTSHEET.SAVE_CHANGES}
             </Button>
           </SheetFooter>
         </form>

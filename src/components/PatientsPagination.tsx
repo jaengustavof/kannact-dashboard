@@ -6,12 +6,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-
-type PatientsPaginationProps = {
-  currentPage: number;
-  totalPages: number;
-  onPageChange: (page: number) => void;
-};
+import { PatientsPaginationProps } from "@/types/patients.types";
 
 export function PatientsPagination({
   currentPage,

@@ -14,11 +14,8 @@ import {
 import EditNoteSheet from "./EditNoteSheet";
 import { deleteNote } from "@/api/patientsApi";
 import { Note } from "@/types/api.types";
-
-type NotesProps = {
-  notes: Note[];
-  patientId: string;
-};
+import DROPDOWN from "@/constants/Dropdown";
+import { NotesProps } from "@/types/patients.types";
 
 export default function Notes({ notes, patientId }: NotesProps) {
   const queryClient = useQueryClient();
@@ -43,14 +40,16 @@ export default function Notes({ notes, patientId }: NotesProps) {
             <div className="note-list__text-container">
               <p>{note.content}</p>
               <span className="note-list__note-date">
-                {new Date(note.createdAt).toLocaleDateString()}
+                {new Date(note.createdAt).toLocaleString()}
               </span>
             </div>
 
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="outline" size="icon">
-                  <Settings />
+                <Button asChild variant="outline" size="icon">
+                  <span>
+                    <Settings />
+                  </span>
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
@@ -58,14 +57,14 @@ export default function Notes({ notes, patientId }: NotesProps) {
                   onClick={() => setOpenNote(note)}
                   className="p-0 focus:bg-transparent cursor-pointer w-full"
                 >
-                  Edit
+                  {DROPDOWN.EDIT}
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
                   onClick={() => handleDelete(note.id)}
                   className="p-0 focus:bg-transparent cursor-pointer w-full text-red-600"
                 >
-                  Delete
+                  {DROPDOWN.DELETE}
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>

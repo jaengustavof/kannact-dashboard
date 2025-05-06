@@ -1,10 +1,5 @@
-import React from "react";
-
-type PatientCardProps = {
-  name: string;
-  age: number;
-  condition: string;
-};
+import ADDPATIENT from "../constants/AddPatient";
+import { PatientCardProps } from "@/types/patients.types";
 
 export default function PatientCard({
   name,
@@ -22,8 +17,12 @@ export default function PatientCard({
       </div>
       <div className="patient-card__info">
         <h2 className="patient-card__name">{name}</h2>
-        <p className="patient-card__text">Age: {age}</p>
-        <p className="patient-card__text">Condition: {condition}</p>
+        <p className="patient-card__text">
+          {ADDPATIENT.AGE}: {age}
+        </p>
+        <p className="patient-card__text">
+          {ADDPATIENT.CONDITION}: {condition}
+        </p>
       </div>
     </div>
   );

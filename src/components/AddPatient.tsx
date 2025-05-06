@@ -14,12 +14,8 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { toast } from "react-toastify";
-
-type FormValues = {
-  name: string;
-  age: number;
-  condition: string;
-};
+import ADDPATIENT from "@/constants/AddPatient";
+import { AddPatientFormValues } from "@/types/patients.types";
 
 export default function AddPatient({
   onPatientAdded,
@@ -28,7 +24,7 @@ export default function AddPatient({
 }) {
   const queryClient = useQueryClient();
 
-  const { register, handleSubmit, reset } = useForm<FormValues>({
+  const { register, handleSubmit, reset } = useForm<AddPatientFormValues>({
     defaultValues: {
       name: "",
       age: 0,
@@ -37,7 +33,7 @@ export default function AddPatient({
   });
 
   const mutation = useMutation({
-    mutationFn: (data: FormValues) => createPatient(data),
+    mutationFn: (data: AddPatientFormValues) => createPatient(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["patients"] });
       reset();
@@ -55,7 +51,7 @@ export default function AddPatient({
     },
   });
 
-  const onSubmit = (data: FormValues) => {
+  const onSubmit = (data: AddPatientFormValues) => {
     mutation.mutate(data);
   };
 
@@ -66,19 +62,19 @@ export default function AddPatient({
           variant="outline"
           className="border-green-600 bg-green-600 text-white hover:bg-white hover:text-green-600"
         >
-          + Add Patient
+          {ADDPATIENT.ADD_PATIENT_PLUS}
         </Button>
       </SheetTrigger>
       <SheetContent>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           <SheetHeader>
-            <SheetTitle>Add Patient</SheetTitle>
+            <SheetTitle>{ADDPATIENT.ADD_PATIENT}</SheetTitle>
           </SheetHeader>
 
           <div className="grid gap-4 py-2">
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="name" className="text-right">
-                Name
+                {ADDPATIENT.NAME}
               </Label>
               <Input
                 id="name"
@@ -90,7 +86,7 @@ export default function AddPatient({
 
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="age" className="text-right">
-                Age
+                {ADDPATIENT.AGE}
               </Label>
               <Input
                 id="age"
@@ -103,7 +99,7 @@ export default function AddPatient({
 
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="condition" className="text-right">
-                Condition
+                {ADDPATIENT.CONDITION}
               </Label>
               <Input
                 id="condition"
@@ -117,7 +113,7 @@ export default function AddPatient({
           <SheetFooter>
             <SheetClose asChild>
               <Button type="submit" disabled={mutation.isPending}>
-                Add new patient
+                {ADDPATIENT.ADD_NEW_PATIENT}
               </Button>
             </SheetClose>
           </SheetFooter>

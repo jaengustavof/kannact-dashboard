@@ -26,10 +26,9 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 import EditPatientSheet from "./EditPatientSheet";
-
-type PatientsTableProps = {
-  patients: Patient[];
-};
+import { PatientsTableProps } from "@/types/patients.types";
+import DROPDOWN from "@/constants/Dropdown";
+import ADDPATIENT from "@/constants/AddPatient";
 
 export function PatientsTable({ patients }: PatientsTableProps) {
   const queryClient = useQueryClient();
@@ -64,11 +63,11 @@ export function PatientsTable({ patients }: PatientsTableProps) {
       <TableCaption>A list of your recent patients.</TableCaption>
       <TableHeader>
         <TableRow>
-          <TableHead className="w-[100px]">Patient Id</TableHead>
-          <TableHead>Name</TableHead>
-          <TableHead>Age</TableHead>
-          <TableHead className="text-right">Condition</TableHead>
-          <TableHead className="text-right">Actions</TableHead>
+          <TableHead className="w-[100px]">{ADDPATIENT.PATIENT_ID}</TableHead>
+          <TableHead>{ADDPATIENT.NAME}</TableHead>
+          <TableHead>{ADDPATIENT.AGE}</TableHead>
+          <TableHead className="text-right">{ADDPATIENT.CONDITION}</TableHead>
+          <TableHead className="text-right">{ADDPATIENT.ACTIONS}</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -83,14 +82,16 @@ export function PatientsTable({ patients }: PatientsTableProps) {
             <TableCell className="text-right">
               <DropdownMenu>
                 <DropdownMenuTrigger className="px-4 py-2">
-                  <Button variant="outline" size="icon">
-                    <Settings />
+                  <Button asChild variant="outline" size="icon">
+                    <span>
+                      <Settings />
+                    </span>
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
                   <DropdownMenuItem>
                     <Link className=" w-full" to={`/patients/${patient.id}`}>
-                      Profile
+                      {DROPDOWN.PROFILE}
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
@@ -100,7 +101,7 @@ export function PatientsTable({ patients }: PatientsTableProps) {
                       onClick={() => setOpenSheetPatient(patient)}
                       className="p-0 focus:bg-transparent cursor-pointer w-full"
                     >
-                      Edit
+                      {DROPDOWN.EDIT}
                     </DropdownMenuItem>
                   </DropdownMenuItem>
 
@@ -110,7 +111,7 @@ export function PatientsTable({ patients }: PatientsTableProps) {
                       onClick={() => removePatient(patient.id)}
                       className="p-0 focus:bg-transparent cursor-pointer w-full text-red-600"
                     >
-                      Delete
+                      {DROPDOWN.DELETE}
                     </DropdownMenuItem>
                   </DropdownMenuItem>
                 </DropdownMenuContent>

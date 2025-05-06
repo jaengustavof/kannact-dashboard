@@ -1,7 +1,6 @@
 import { useForm } from "react-hook-form";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { editNote } from "@/api/patientsApi";
-import { Note } from "@/types/api.types";
 import {
   Sheet,
   SheetContent,
@@ -12,16 +11,9 @@ import {
 } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-
-type EditNoteSheetProps = {
-  patientId: string;
-  note: Note;
-  onClose: () => void;
-};
-
-type FormValues = {
-  content: string;
-};
+import EDITNOTESHEET from "@/constants/EditNoteSheet";
+import { EditNoteSheetProps } from "@/types/patients.types";
+import { EditNoteFormValues } from "@/types/patients.types";
 
 export default function EditNoteSheet({
   patientId,
@@ -30,14 +22,14 @@ export default function EditNoteSheet({
 }: EditNoteSheetProps) {
   const queryClient = useQueryClient();
 
-  const { register, handleSubmit, reset } = useForm<FormValues>({
+  const { register, handleSubmit, reset } = useForm<EditNoteFormValues>({
     defaultValues: {
       content: note.content,
     },
   });
 
   const mutation = useMutation({
-    mutationFn: (data: FormValues) =>
+    mutationFn: (data: EditNoteFormValues) =>
       editNote(patientId, note.id, data.content),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["notes", patientId] });
@@ -46,7 +38,7 @@ export default function EditNoteSheet({
     },
   });
 
-  const onSubmit = (data: FormValues) => {
+  const onSubmit = (data: EditNoteFormValues) => {
     mutation.mutate(data);
   };
 
@@ -55,29 +47,27 @@ export default function EditNoteSheet({
       <SheetContent>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           <SheetHeader>
-            <SheetTitle>Edit Note</SheetTitle>
-            <SheetDescription>
-              Update the content of this note and save your changes.
-            </SheetDescription>
+            <SheetTitle>{EDITNOTESHEET.EDIT_NOTE}</SheetTitle>
+            <SheetDescription>{EDITNOTESHEET.UPDATE_NOTE}</SheetDescription>
           </SheetHeader>
 
           <div className="grid gap-4 py-2">
             <div className="grid grid-cols-4 items-start gap-4">
               <Label htmlFor="content" className="text-right pt-2">
-                Content
+                {EDITNOTESHEET.CONTENT}
               </Label>
               <textarea
                 id="content"
                 {...register("content", { required: true })}
                 className="col-span-3 border rounded px-3 py-2 resize-y min-h-[100px]"
-                placeholder="Edit note content..."
+                placeholder={EDITNOTESHEET.PLACE_HOLDER}
               />
             </div>
           </div>
 
           <SheetFooter>
             <Button type="submit" disabled={mutation.isPending}>
-              Save Changes
+              {EDITNOTESHEET.SAVE_CHANGES}
             </Button>
           </SheetFooter>
         </form>
